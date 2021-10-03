@@ -1,6 +1,6 @@
 # spotifyclustering
 
-By performing agglomerative clustering on your liked songs on spotify, this script automatically creates playlists with songs that are similar to each other according to spotify's audio features. The names of the playlists are based on the approximated medoid of the cluster.
+By performing agglomerative clustering on your liked songs on spotify, this script automatically creates playlists with songs that are similar to each other according to spotify's audio features. The names of the playlists are based on the approximated medoid of each cluster.
 
 Want to have a look at one of the playlists that was generated for my spotify account?
 
