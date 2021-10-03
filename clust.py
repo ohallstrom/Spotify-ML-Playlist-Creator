@@ -11,8 +11,8 @@ should_delete_previous = True
 # initialize client
 sp = spotipy.Spotify(
     auth_manager=SpotifyOAuth(
-        client_id="b049aec063a34f9a82736498da19de3f",
-        client_secret="a181cae4c2dd4a7ab5c88eef0239edb7",
+        client_id="",
+        client_secret="",
         redirect_uri="http://localhost/",
         scope="user-library-read ugc-image-upload playlist-modify-private playlist-read-private playlist-modify-public user-follow-modify"))
 user = sp.me()['id']
