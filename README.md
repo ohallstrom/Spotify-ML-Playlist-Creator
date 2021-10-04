@@ -1,4 +1,4 @@
-# spotifyclustering
+# Spotify-ML-Playlist-Creator
 
 By performing agglomerative clustering on your liked songs on spotify, this script automatically creates playlists with songs that are similar to each other according to spotify's audio features. The names of the playlists are based on the approximated medoid of each cluster.
 
