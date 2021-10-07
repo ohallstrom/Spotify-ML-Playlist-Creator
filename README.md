@@ -4,4 +4,4 @@ By performing agglomerative clustering on your liked songs on spotify, this scri
 
 Want to have a look at one of the playlists that was generated for my spotify account?
 
-Check this [playlist](https://open.spotify.com/playlist/2CrnrUDXi9oGxR1Y1nJ5fA?si=2f3b164985694f2d) out!
+Check this [playlist](https://open.spotify.com/playlist/4TNQMWHW5HaALMMVF0IIUf?si=58eebf946af94a75) out!
