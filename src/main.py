@@ -10,9 +10,12 @@ from spotipy.oauth2 import SpotifyOAuth
 import numpy as np
 from sklearn import cluster as skc
 import spotify_helpers as sh
+from sklearn.metrics import DistanceMetric as DM
+import os
+from dotenv import load_dotenv
 
 # Setting constants
-MIN_THRESHOLD = 10
+MIN_THRESHOLD = 15
 SHOULD_DELETE_PREVIOUS = True
 ATTRIBUTE_LABELS = [
     ('valence',1),
@@ -25,14 +28,17 @@ ATTRIBUTE_LABELS = [
     ('mode', 1)
     ]
 PLAYLIST_DESCRIPTION = 'Automatically generated playlist by clustering of my liked songs.'
+CHEBYSHEV = False #if chebyshev distance should be used or not
 
 
 if __name__ == '__main__':
     # initialize client and get id of current user
+    load_dotenv()
+    secret = os.environ.get('secret')
     sp = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             client_id="b049aec063a34f9a82736498da19de3f",
-            client_secret="",
+            client_secret=secret,
             redirect_uri="http://localhost/",
             scope="user-library-read playlist-modify-private playlist-read-private playlist-modify-public user-follow-modify"))
     user = sp.me()['id']
@@ -41,12 +47,27 @@ if __name__ == '__main__':
     (attributes, ids, names) = sh.get_features_of_saved_songs(sp, ATTRIBUTE_LABELS)
 
     # create the model and the clusters
-    model = skc.AgglomerativeClustering(
-        n_clusters=None,
-        linkage='complete',
-        distance_threshold=0.35
+    if CHEBYSHEV:
+        dist = DM.get_metric('chebyshev')
+        normalized_attributes = (attributes - attributes.mean(0)) / attributes.std(0)
+        print(type(attributes))
+        distance_matrix = dist.pairwise(normalized_attributes)
+        model = skc.AgglomerativeClustering(
+            affinity = 'precomputed',
+            n_clusters=None,
+            linkage='complete',
+            distance_threshold=1.25
         )
-    model.fit(attributes)
+        model.fit(distance_matrix)
+        print("")
+
+    else:
+        model = skc.AgglomerativeClustering(
+            n_clusters=None,
+            linkage='complete',
+            distance_threshold=0.35
+            )
+        model.fit(attributes)
 
     #add track_ids to each cluster
     clusters = [[] for i in range(model.n_clusters_)]
@@ -59,11 +80,14 @@ if __name__ == '__main__':
 
     #filter away clusters smaller than MIN_THRESHOLD and get their names
     playlists_to_create = []
+    names = set()
     for i in range(model.n_clusters_):
+        print(len(clusters[i]))
         # filter away too small clusters
         if len(clusters[i]) > MIN_THRESHOLD:
             name = sh.get_playlist_name(np.array(clusters_attributes[i]), clusters_names[i])
             playlists_to_create.append((name, clusters[i]))
+            names.add(name)
 
     if SHOULD_DELETE_PREVIOUS:
         sh.delete_previously_generated_lists(sp, PLAYLIST_DESCRIPTION)
@@ -76,7 +100,7 @@ if __name__ == '__main__':
     playlists = sp.current_user_playlists()
     playlist_ids = {}
     for i, playlist in enumerate(playlists['items']):
-        if playlist['description'] == PLAYLIST_DESCRIPTION:
+        if playlist['name'] in names:
             playlist_ids[playlist['name']] = playlist['id']
 
     #add tracks to the created playlists
