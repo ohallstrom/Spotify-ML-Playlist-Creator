@@ -8,8 +8,6 @@ Python Version: 3.8
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import numpy as np
-from sklearn import cluster as skc
-import spotify_helpers
 
 def get_features_of_saved_songs(client, attribute_labels):
     """
@@ -69,7 +67,7 @@ def delete_previously_generated_lists(client, description):
             if playlist['description'] == description:
                 client.current_user_unfollow_playlist(playlist['id'])
                 print("Playlist {} has been erased.".format(playlist['name']))
-            elif playlist['name'][:8] == "Vibes of" and playlist['tracks']['total']==0:
+            elif playlist['name'][:11] == "AI-Vibes of":
                 client.current_user_unfollow_playlist(playlist['id'])
                 print("Playlist {} has been erased.".format(playlist['name']))
         offset += 50
@@ -82,6 +80,7 @@ def create_playlist(client, user, name, description):
     :param name: String of the playlist name
     :param description: String used for playlist descriptions
     '''
+    # Sometimes the description is not added to the playlist
     client.user_playlist_create(
         user=user,
         name=name,
@@ -98,7 +97,7 @@ def get_playlist_name(attributes, names):
     """
     centroid = attributes.mean(axis=0)
     medoid_idx = ((attributes - centroid) ** 2).sum(axis=1).argmin()
-    return "Vibes of " + names[medoid_idx]
+    return "AI-Vibes of " + names[medoid_idx]
 
 def add_tracks(client, user, name, tracks, id, n_try):
     '''
@@ -124,5 +123,5 @@ def add_tracks(client, user, name, tracks, id, n_try):
                 tracks=tracks,
                 position=None)
         except KeyError:
-            print("An error occured in the creation of " + playlist[0] + ", let's try again!")
+            print("An error occured in the creation of " + name + ", let's try again!")
             add_tracks(client, user, name, tracks, id, n_try+1)
