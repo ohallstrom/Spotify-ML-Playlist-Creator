@@ -1,6 +1,6 @@
 # Spotify-ML-Playlist-Creator
 
-I created this little fun thing in the summer of 2021, and since then I have made some minor changes to the code, as for example when testing other distance measures.
+I created this little fun thing in the summer of 2021, and since then I have made some minor changes to the code, as for example testing other distance measures.
 
 By performing agglomerative clustering on your liked songs on spotify, this script automatically creates playlists with songs that are similar to each other according to spotify's audio features. The names of the playlists are based on the approximated medoid of each cluster.
 
