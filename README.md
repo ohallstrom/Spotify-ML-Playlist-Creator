@@ -8,4 +8,4 @@ Below you can see one of the playlists that was generated for my spotify account
 
 ![alt text](./viz/playlist_sample.png)
 
-In order to listen, or see all of the songs in this playlist, click on this [link](https://open.spotify.com/playlist/59RK0ekLvIQKVtgjIQAmSx?si=2865657a244b4ebb)!
+In order to listen, or see all of the songs in this playlist, click on this [link](https://open.spotify.com/playlist/6SPeSK2EENN0lAO2fVjOxM?si=e512c6b1de654493)!
